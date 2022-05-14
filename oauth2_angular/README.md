@@ -26,3 +26,7 @@
 # Create HomeComponent
 
 `ng g c home --module app`
+
+# Install buffer package for base64 encoding
+
+`npm i buffer`

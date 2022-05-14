@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { take } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import tokenUrl from '../constants/token';
-import { HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -12,16 +11,16 @@ import { HttpHeaders } from '@angular/common/http';
 })
 export class AuthComponent implements OnInit {
 
-  constructor(private authService: AuthService, private activateRoute: ActivatedRoute) {
+  constructor(private authService: AuthService, private activateRoute: ActivatedRoute, private router: Router) {
     this.getAuthorizationCode();
   }
 
   ngOnInit(): void {
     this.authService.getToken().pipe(take(1)).subscribe((tokens) => {
-      console.log('tokens === ', tokens);
       if((tokens as any)?.id_token){
         sessionStorage.setItem('id_token', (tokens as any).id_token);
         sessionStorage.setItem('refresh_token', (tokens as any).refresh_token);
+        this.router.navigate(['/home']);
       }
     });
   }
@@ -33,10 +32,4 @@ export class AuthComponent implements OnInit {
       }
     })  
   }
-
-  // alternatively to not get memory leaks
-  // ngOnDestroy(){
-  //   this.subscription.unsubscribe();
-  // }
-
 }

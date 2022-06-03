@@ -1,7 +1,5 @@
 import { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { authorize } from "../links/authorize";
-import { token } from "../links/token";
 import { Buffer } from "buffer";
 
 const Redirect = () => {
@@ -11,13 +9,18 @@ const Redirect = () => {
     useEffect(() => {
         if(searchParams?.get('code')){
             const code = searchParams?.get('code');
+            console.log('code ====', code);
             const client = 'client';
             const secret = 'secret';
             const headers = new Headers();
             headers.append('Content-type', 'application/json');
             headers.append('Authorization', `Basic ${Buffer.from(`${client}:${secret}`).toString('base64')}`);
 
-            const url = token(code);
+            const verifier = sessionStorage.getItem('codeVerifier');
+            
+            const initialUrl = 'http://localhost:8080/oauth2/token?client_id=client&redirect_uri=http://127.0.0.1:3000/authorized&grant_type=authorization_code';
+            const url = `${initialUrl}&code=${code}&code_verifier=${verifier}`;
+            
             fetch(url, {
                 method: 'POST',
                 mode: 'cors',
@@ -31,8 +34,14 @@ const Redirect = () => {
             }).catch((err) => {
                 console.log(err);
             })
-        } else if(!searchParams?.get('code')){
-            window.location.href = authorize();
+        }
+    }, []);
+    useEffect(() => {
+        if(!searchParams?.get('code')){
+            const codeChallenge = sessionStorage.getItem('codeChallenge');
+            const link = `http://localhost:8080/oauth2/authorize?response_type=code&client_id=client&scope=openid&redirect_uri=http://127.0.0.1:3000/authorized&code_challenge=${codeChallenge}&code_challenge_method=S256`;
+          
+            window.location.href = link;
         }
     }, []);
     return <p>Redirecting ...</p>

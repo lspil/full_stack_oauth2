@@ -9,7 +9,6 @@ const Redirect = () => {
     useEffect(() => {
         if(searchParams?.get('code')){
             const code = searchParams?.get('code');
-            console.log('code ====', code);
             const client = 'client';
             const secret = 'secret';
             const headers = new Headers();
@@ -20,7 +19,7 @@ const Redirect = () => {
             
             const initialUrl = 'http://localhost:8080/oauth2/token?client_id=client&redirect_uri=http://127.0.0.1:3000/authorized&grant_type=authorization_code';
             const url = `${initialUrl}&code=${code}&code_verifier=${verifier}`;
-            
+
             fetch(url, {
                 method: 'POST',
                 mode: 'cors',

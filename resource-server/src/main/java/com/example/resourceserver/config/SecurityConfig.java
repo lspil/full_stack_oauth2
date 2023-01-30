@@ -26,11 +26,12 @@ public class SecurityConfig {
 
       c.configurationSource(source);
     });
-    return http.oauth2ResourceServer(
-        j -> j.jwt().jwkSetUri("http://localhost:8080/oauth2/jwks")
-    ).authorizeRequests()
-        .anyRequest().authenticated()
-        .and().build();
+
+    http.authorizeHttpRequests().anyRequest()
+        .authenticated().and()
+        .oauth2ResourceServer()
+        .jwt();
+    return http.build();
   }
 
 }

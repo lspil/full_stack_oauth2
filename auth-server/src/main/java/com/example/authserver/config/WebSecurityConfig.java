@@ -22,7 +22,7 @@ public class WebSecurityConfig {
     corsCustomizer.corsCustomizer(http);
     return http.formLogin()
             .and()
-          .authorizeRequests()
+          .authorizeHttpRequests()
             .anyRequest().authenticated()
           .and().build();
   }

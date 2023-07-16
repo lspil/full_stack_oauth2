@@ -17,7 +17,7 @@ const Redirect = () => {
 
             const verifier = sessionStorage.getItem('codeVerifier');
             
-            const initialUrl = 'http://localhost:8080/oauth2/token?client_id=client&redirect_uri=http://127.0.0.1:3000/authorized&grant_type=authorization_code';
+            const initialUrl = 'http://localhost:8080/oauth2/token?client_id=client&redirect_uri=http://localhost:3000/authorized&grant_type=authorization_code';
             const url = `${initialUrl}&code=${code}&code_verifier=${verifier}`;
 
             fetch(url, {
@@ -38,7 +38,7 @@ const Redirect = () => {
     useEffect(() => {
         if(!searchParams?.get('code')){
             const codeChallenge = sessionStorage.getItem('codeChallenge');
-            const link = `http://localhost:8080/oauth2/authorize?response_type=code&client_id=client&scope=openid&redirect_uri=http://127.0.0.1:3000/authorized&code_challenge=${codeChallenge}&code_challenge_method=S256`;
+            const link = `http://localhost:8080/oauth2/authorize?response_type=code&client_id=client&scope=openid&redirect_uri=http://localhost:3000/authorized&code_challenge=${codeChallenge}&code_challenge_method=S256`;
           
             window.location.href = link;
         }
